@@ -60,4 +60,18 @@ public class PersonPath {
 		return Response.status(401).build();
 
 	}
+	
+	@GET
+	@Path("nickname")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getGebruiker(@HeaderParam("Authorization") String accessToken) {
+		Model model = (Model) context.getAttribute("model");
+		
+		for(Gebruiker g : model.getGebruikers()) {
+			if(g.getNickname().equals("nickname")) {
+				return Response.ok(g).build();
+			}
+		}
+		return Response.status(404).build();
+	}
 }
