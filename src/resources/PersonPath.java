@@ -19,8 +19,7 @@ import model.Model;
 
 @Path("/gebruikers")
 public class PersonPath {
-	@Context
-	ServletContext context;
+	@Context ServletContext context;
 
 	@POST
 	@Path("/add-gebruiker")
