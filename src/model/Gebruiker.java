@@ -2,6 +2,9 @@ package model;
 
 import java.util.Random;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -10,10 +13,12 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ser.std.SerializableSerializer;
 
 @XmlRootElement(name= "gebruiker")
-@JsonIgnoreProperties("internal")
+//@JsonIgnoreProperties("internal")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class Gebruiker {
 	private String voornaam;
 	private String tussenvoegsel;
@@ -38,7 +43,6 @@ public class Gebruiker {
 		return voornaam;
 	}
 	
-	@XmlElement 
 	public void setVoornaam(String voornaam) {
 		this.voornaam = voornaam;
 	}
@@ -47,7 +51,6 @@ public class Gebruiker {
 		return tussenvoegsel;
 	}
 	
-	@XmlElement 
 	public void setTussenvoegsel(String tussenvoegsel) {
 		this.tussenvoegsel = tussenvoegsel;
 	}
@@ -55,8 +58,7 @@ public class Gebruiker {
 	public String getAchternaam() {
 		return achternaam;
 	}
-
-	@XmlElement 
+	
 	public void setAchternaam(String achternaam) {
 		this.achternaam = achternaam;
 	}
@@ -68,7 +70,7 @@ public class Gebruiker {
 		return wachtwoord;
 	}
 
-	
+	@JsonProperty("wachtwoord")
 	public void setWachtwoord(String wachtwoord) {
 		this.wachtwoord = wachtwoord;
 	}
@@ -77,11 +79,11 @@ public class Gebruiker {
 		return nickname;
 	}
 
-	@XmlElement 
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
 	
+	@XmlTransient
 	public String getAccessToken() {
 		if (accessToken.equals("")){
 			String mogelijkheden ="abcdefghijklmnopqrstuvwxyz0123456789";
