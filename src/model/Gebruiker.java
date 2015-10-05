@@ -20,7 +20,7 @@ public class Gebruiker {
 	private String achternaam;
 	private String wachtwoord;
 	private String nickname;
-	private String accessToken;
+	private String accessToken = "";
 
 	public Gebruiker() {
 		
@@ -32,7 +32,6 @@ public class Gebruiker {
 		this.achternaam = achternaam;
 		this.wachtwoord = wachtwoord;
 		this.nickname = nickname;
-		this.accessToken = "";
 	}
 
 	public String getVoornaam() {
@@ -62,8 +61,9 @@ public class Gebruiker {
 		this.achternaam = achternaam;
 	}
 	
-	@JsonIgnore
+	
 	@XmlTransient
+	@JsonIgnore
 	public String getWachtwoord() {
 		return wachtwoord;
 	}
