@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Random;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -18,7 +20,8 @@ public class Gebruiker {
 	private String achternaam;
 	private String wachtwoord;
 	private String nickname;
-	
+	private String accessToken;
+
 	public Gebruiker() {
 		
 	}
@@ -29,6 +32,7 @@ public class Gebruiker {
 		this.achternaam = achternaam;
 		this.wachtwoord = wachtwoord;
 		this.nickname = nickname;
+		this.accessToken = "";
 	}
 
 	public String getVoornaam() {
@@ -78,4 +82,19 @@ public class Gebruiker {
 		this.nickname = nickname;
 	}
 	
+	public String getAccessToken() {
+		if (accessToken.equals("")){
+			String mogelijkheden ="abcdefghijklmnopqrstuvwxyz0123456789";
+			Random r = new Random();
+			for (int i = 0;i<10;i++){
+				accessToken += mogelijkheden.charAt(r.nextInt(mogelijkheden.length()));
+			}
+			
+		}
+		return accessToken;
+	}
+	
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
 }
