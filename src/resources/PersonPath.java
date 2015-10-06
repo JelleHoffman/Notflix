@@ -24,7 +24,7 @@ public class PersonPath {
 	@POST
 	@Path("/add-gebruiker")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Gebruiker addGebruiker(Gebruiker gebruiker) {
 		Model model = (Model) context.getAttribute("model");
 		System.out.println(gebruiker.getWachtwoord());
@@ -46,7 +46,7 @@ public class PersonPath {
 	}
 
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response getGebruikers(@HeaderParam("Authorization") String accessToken) {
 		Model model = (Model) context.getAttribute("model");
 		for (Gebruiker g : model.getGebruikers()) {
@@ -62,7 +62,7 @@ public class PersonPath {
 	
 	@GET
 	@Path("nickname")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response getGebruiker(@HeaderParam("Authorization") String accessToken) {
 		Model model = (Model) context.getAttribute("model");
 		

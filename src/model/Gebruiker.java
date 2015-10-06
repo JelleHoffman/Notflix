@@ -71,6 +71,8 @@ public class Gebruiker {
 	}
 
 	@JsonProperty("wachtwoord")
+	@XmlElement
+	@XmlAttribute
 	public void setWachtwoord(String wachtwoord) {
 		this.wachtwoord = wachtwoord;
 	}
@@ -84,6 +86,7 @@ public class Gebruiker {
 	}
 	
 	@XmlTransient
+	@JsonIgnore
 	public String getAccessToken() {
 		if (accessToken.equals("")){
 			String mogelijkheden ="abcdefghijklmnopqrstuvwxyz0123456789";

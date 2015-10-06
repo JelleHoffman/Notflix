@@ -9,8 +9,8 @@ public class Model {
 	public Model(){
 		gebruikers.add(new Gebruiker("Jelle", "", "Hoffman", "1234", "peddz"));
 		gebruikers.add(new Gebruiker("Luuk", "", "Wellink", "12345", "sportief pookje"));
-		films.add(new Movie(0, 0, "Reservoir Dogs", null, 0, null, null));
-		Movie m = new Movie(0, 0, "Fight Club", null, 0, null, null);
+		films.add(new Movie(0, 1, "Reservoir Dogs", null, 0, null, null));
+		Movie m = new Movie(0, 2, "Fight Club", null, 0, null, null);
 		m.addRating(new Rating(1, gebruikers.get(0)));
 		films.add(m);
 		
