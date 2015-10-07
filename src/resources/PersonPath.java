@@ -29,11 +29,12 @@ public class PersonPath {
 	@Path("/add-gebruiker")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response addGebruiker(Gebruiker gebruiker) {
+	public Response addGebruiker(Gebruiker gebruiker, @HeaderParam ("Wachtwoord") String wachtwoord) {
 		Model model = (Model) context.getAttribute("model");
-		System.out.println(gebruiker.getWachtwoord());
-		model.addGebruiker(gebruiker);
-		return Response.ok(gebruiker).build();
+		Gebruiker addGebruiker = gebruiker;
+		addGebruiker.setWachtwoord(wachtwoord);
+		model.addGebruiker(addGebruiker);
+		return Response.ok(addGebruiker).build();
 	}
 
 	@GET
@@ -44,7 +45,7 @@ public class PersonPath {
 		Model model = (Model) context.getAttribute("model");
 		System.out.println("hij komt hier wel");
 		for (Gebruiker g : model.getGebruikers()) {
-			if (g.getNickname().equals(nickname)&&g.getWachtwoord().equals(wachtwoord)) {
+			if (g.getNickname().equals(nickname)&&g.geefWachtwoord().equals(wachtwoord)) {
 				g.setAccessToken(getRandomToken());
 				System.out.println(g.getAccessToken());
 				return Response.ok(g.getAccessToken()).build();
