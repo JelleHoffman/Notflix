@@ -14,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -31,7 +32,8 @@ public class FilmsPath {
 	public Response getFilms(@HeaderParam("Authorization") String accessToken){
 		Model model = (Model) context.getAttribute("model");
 		if(accessTokenExcist(accessToken)){
-			return Response.ok(model.getMovies()).build();
+			GenericEntity<ArrayList<Movie>> entity= new GenericEntity<ArrayList<Movie>>(model.getMovies()){};
+			return Response.ok(entity).build();
 		}
 		return Response.status(401).build();
 	}

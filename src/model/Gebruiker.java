@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ser.std.SerializableSerializer;
 
 @XmlRootElement(name= "gebruiker")
 //@JsonIgnoreProperties("internal")
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Gebruiker {
 	private String voornaam;
 	private String tussenvoegsel;
@@ -39,48 +39,54 @@ public class Gebruiker {
 		this.nickname = nickname;
 	}
 
+	@XmlElement
 	public String getVoornaam() {
 		return voornaam;
 	}
 	
+	@XmlElement
 	public void setVoornaam(String voornaam) {
 		this.voornaam = voornaam;
 	}
-
+	
+	@XmlElement
 	public String getTussenvoegsel() {
 		return tussenvoegsel;
 	}
 	
+	@XmlElement
 	public void setTussenvoegsel(String tussenvoegsel) {
 		this.tussenvoegsel = tussenvoegsel;
 	}
 
+	@XmlElement
 	public String getAchternaam() {
 		return achternaam;
 	}
 	
+	@XmlElement
 	public void setAchternaam(String achternaam) {
 		this.achternaam = achternaam;
 	}
 	
 	
-	@XmlTransient
 	@JsonIgnore
 	public String getWachtwoord() {
 		return wachtwoord;
 	}
-
-	@JsonProperty("wachtwoord")
+	
 	@XmlElement
-	@XmlAttribute
+	@JsonProperty("wachtwoord")
 	public void setWachtwoord(String wachtwoord) {
 		this.wachtwoord = wachtwoord;
 	}
-
+	
+	@XmlElement
 	public String getNickname() {
 		return nickname;
 	}
-
+	
+	@XmlElement
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}

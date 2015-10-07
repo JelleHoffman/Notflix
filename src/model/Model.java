@@ -2,9 +2,13 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "model")
 public class Model {
-	private ArrayList<Gebruiker> gebruikers = new ArrayList<>();
-	private ArrayList<Movie> films = new ArrayList<>();
+	@XmlElement private ArrayList<Gebruiker> gebruikers = new ArrayList<>();
+	@XmlElement private ArrayList<Movie> films = new ArrayList<>();
 
 	public Model(){
 		gebruikers.add(new Gebruiker("Jelle", "", "Hoffman", "1234", "peddz"));

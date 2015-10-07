@@ -14,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -57,7 +58,9 @@ public class PersonPath {
 	public Response getGebruikers(@HeaderParam("Authorization") String accessToken) {
 		Model model = (Model) context.getAttribute("model");
 		if (accessTokenExcist(accessToken)) {
-			return Response.ok(model.getGebruikers()).build();
+			ArrayList<Gebruiker> gebruikers = model.getGebruikers();
+			GenericEntity<ArrayList<Gebruiker>> entity= new GenericEntity<ArrayList<Gebruiker>>(model.getGebruikers()){};
+			return Response.ok(entity).build();
 		}
 		return Response.status(401).build();
 
@@ -66,7 +69,7 @@ public class PersonPath {
 	@GET
 	@Path("get-gebruiker")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response getGebruiker(@FormParam("nickname") String nickname,
+	public Response getGebruiker(@QueryParam("nickname") String nickname,
 			@HeaderParam("Authorization") String accessToken) {
 		Model model = (Model) context.getAttribute("model");
 		if(accessTokenExcist(accessToken)){
