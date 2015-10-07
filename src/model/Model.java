@@ -11,7 +11,7 @@ public class Model {
 		gebruikers.add(new Gebruiker("Luuk", "", "Wellink", "12345", "sportief pookje"));
 		films.add(new Movie(0, 1, "Reservoir Dogs", null, 0, null, null));
 		Movie m = new Movie(0, 2, "Fight Club", null, 0, null, null);
-		m.addRating(new Rating(1, gebruikers.get(0)));
+		m.addRating(new Rating(1, gebruikers.get(1)));
 		films.add(m);
 		
 	}

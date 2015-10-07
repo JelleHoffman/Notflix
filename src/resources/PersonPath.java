@@ -1,13 +1,16 @@
 package resources;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -25,52 +28,76 @@ public class PersonPath {
 	@Path("/add-gebruiker")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Gebruiker addGebruiker(Gebruiker gebruiker) {
+	public Response addGebruiker(Gebruiker gebruiker) {
 		Model model = (Model) context.getAttribute("model");
 		System.out.println(gebruiker.getWachtwoord());
 		model.addGebruiker(gebruiker);
-		return gebruiker;
+		return Response.ok(gebruiker).build();
 	}
 
 	@GET
 	@Path("get-accesstoken")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getAccessToken(@QueryParam("nickname") String nickname) {
+	public Response getAccessToken(@HeaderParam("Nickname") String nickname, 
+			@HeaderParam("Wachtwoord") String wachtwoord) {
 		Model model = (Model) context.getAttribute("model");
+		System.out.println("hij komt hier wel");
 		for (Gebruiker g : model.getGebruikers()) {
-			if (g.getNickname().equals(nickname)) {
-				return g.getAccessToken();
+			if (g.getNickname().equals(nickname)&&g.getWachtwoord().equals(wachtwoord)) {
+				g.setAccessToken(getRandomToken());
+				System.out.println(g.getAccessToken());
+				return Response.ok(g.getAccessToken()).build();
 			}
 		}
-		return null;
+		return Response.status(401).build();
 	}
 
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response getGebruikers(@HeaderParam("Authorization") String accessToken) {
 		Model model = (Model) context.getAttribute("model");
-		for (Gebruiker g : model.getGebruikers()) {
-
-			if (g.getAccessToken().equals(accessToken)) {
-				return Response.ok(model.getGebruikers()).build();
-			}
-
+		if (accessTokenExcist(accessToken)) {
+			return Response.ok(model.getGebruikers()).build();
 		}
 		return Response.status(401).build();
 
 	}
 	
 	@GET
-	@Path("nickname")
+	@Path("get-gebruiker")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response getGebruiker(@HeaderParam("Authorization") String accessToken) {
+	public Response getGebruiker(@FormParam("nickname") String nickname,
+			@HeaderParam("Authorization") String accessToken) {
 		Model model = (Model) context.getAttribute("model");
-		
-		for(Gebruiker g : model.getGebruikers()) {
-			if(g.getNickname().equals("nickname")) {
-				return Response.ok(g).build();
+		if(accessTokenExcist(accessToken)){
+			for(Gebruiker g : model.getGebruikers()) {
+				if(g.getNickname().equals(nickname)) {
+					return Response.ok(g).build();
+				}
+			}
+			return Response.status(404).build();
+		}
+		return Response.status(401).build();
+	}
+	
+	private boolean accessTokenExcist(String accessToken){
+		Model model = (Model) context.getAttribute("model");
+		for(Gebruiker g:model.getGebruikers()){
+			if(g.getAccessToken().equals(accessToken)){
+				return true;
 			}
 		}
-		return Response.status(404).build();
+		
+		return false;
+	}
+	
+	private String getRandomToken(){
+		String mogelijkheden ="abcdefghijklmnopqrstuvwxyz0123456789";
+		String accessToken = "";
+		Random r = new Random();
+		for (int i = 0;i<10;i++){
+			accessToken += mogelijkheden.charAt(r.nextInt(mogelijkheden.length()));
+		}
+		return accessToken;
 	}
 }

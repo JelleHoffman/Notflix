@@ -2,6 +2,15 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@XmlRootElement(name = "movie")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class Movie {
 	private int volgNummer;
 	private int iMDBNummer;
@@ -11,6 +20,7 @@ public class Movie {
 	private String regisseur;
 	private String beschrijving;
 	private ArrayList<Rating> ratings;
+	private double average;
 	
 	public Movie() {
 		
@@ -35,6 +45,8 @@ public class Movie {
 		ratings.add(rating);
 	}
 	
+	@JsonIgnore
+	@XmlTransient 
 	public ArrayList<Rating> getRatings() {
 		return ratings;
 	}
@@ -94,6 +106,19 @@ public class Movie {
 	public void setBeschrijving(String beschrijving) {
 		this.beschrijving = beschrijving;
 	}
+	
+	public double getAverage(){
+		double total = 0;
+		for (Rating r:ratings){
+			total += r.getRating();
+		}
+		average = (total/(double)ratings.size());
+		return average;
+	}
+	public void setAverage(double average){
+		this.average=average;
+	}
+
 	
 	
 }

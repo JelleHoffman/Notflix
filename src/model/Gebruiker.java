@@ -88,14 +88,6 @@ public class Gebruiker {
 	@XmlTransient
 	@JsonIgnore
 	public String getAccessToken() {
-		if (accessToken.equals("")){
-			String mogelijkheden ="abcdefghijklmnopqrstuvwxyz0123456789";
-			Random r = new Random();
-			for (int i = 0;i<10;i++){
-				accessToken += mogelijkheden.charAt(r.nextInt(mogelijkheden.length()));
-			}
-			
-		}
 		return accessToken;
 	}
 	

@@ -69,23 +69,31 @@ public class FilmsPath {
 	}
 	
 	@PUT
-	@Path("{imdb-nummer}/rate")
+	@Path("rate/{imdb-nummer}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response rateFilm(@PathParam("imdb-nummer") int nummer,
 			@HeaderParam("Authorization") String accessToken,
 			@FormParam("rating") double rating){
 		Model model = (Model) context.getAttribute("model");
-		for(Gebruiker g:model.getGebruikers()){
-			if(g.getAccessToken().equals(accessToken)){
-				for (Movie m: model.getMovies()){
-					if (m.getiMDBNummer()==nummer){
-						m.addRating(new Rating(
-								rating,
-								g));
-						return Response.ok(m).build();
+		if(accessTokenExcist(accessToken)){
+			for(Gebruiker g:model.getGebruikers()){
+				if(g.getAccessToken().equals(accessToken)){
+					for (Movie m: model.getMovies()){
+						if (m.getiMDBNummer()==nummer){
+							for(Rating r:m.getRatings()){
+								if(r.getGebruiker().equals(g)){
+									r.setRating(rating);
+									return Response.ok(m).build();
+								}
+							}
+							m.addRating(new Rating(
+									rating,
+									g));
+							return Response.ok(m).build();
+						}
 					}
+					return Response.status(404).build();
 				}
-				return Response.status(404).build();
 			}
 		}
 		return Response.status(401).build();
