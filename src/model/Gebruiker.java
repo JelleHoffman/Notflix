@@ -25,7 +25,7 @@ public class Gebruiker {
 	private String achternaam;
 	@JsonIgnore private String wachtwoord;
 	private String nickname;
-	private String accessToken = "";
+	@JsonIgnore private String accessToken = "";
 
 	public Gebruiker() {
 		
@@ -85,10 +85,11 @@ public class Gebruiker {
 		this.nickname = nickname;
 	}
 	
+	@XmlTransient
 	public String getAccessToken() {
 		return accessToken;
 	}
-	
+
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
 	}

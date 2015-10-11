@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @XmlRootElement(name = "movie")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Movie {
-	@XmlTransient private int volgNummer;
+	@JsonIgnore private int volgNummer;
 	private int iMDBNummer;
 	private String titel;
 	private String datum;
@@ -50,7 +50,8 @@ public class Movie {
 	public ArrayList<Rating> getRatings() {
 		return ratings;
 	}
-
+	
+	@XmlTransient
 	public int getVolgNummer() {
 		return volgNummer;
 	}

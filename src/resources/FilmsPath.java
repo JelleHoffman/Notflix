@@ -24,7 +24,7 @@ import model.Model;
 import model.Movie;
 import model.Rating;
 
-@Path("films")
+@Path("/film")
 public class FilmsPath {
 	@Context ServletContext context;
 	
@@ -36,6 +36,7 @@ public class FilmsPath {
 			GenericEntity<ArrayList<Movie>> entity= new GenericEntity<ArrayList<Movie>>(model.getMovies()){};
 			return Response.ok(entity).build();
 		}
+		
 		return Response.status(401).build();
 	}
 	
@@ -78,7 +79,7 @@ public class FilmsPath {
 			@HeaderParam("Authorization") String accessToken,
 			@FormParam("rating") double rating){
 		Model model = (Model) context.getAttribute("model");
-		if(rating<=0.5||rating>=5){
+		if(rating>=0.5&&rating<=5){
 			if(accessTokenExcist(accessToken)){
 				for(Gebruiker g:model.getGebruikers()){
 					if(g.getAccessToken().equals(accessToken)){
