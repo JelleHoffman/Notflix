@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Movie {
 	@JsonIgnore private int volgNummer;
-	private int iMDBNummer;
+	private String iMDBNummer;
 	private String titel;
 	private String datum;
 	private int duur;
@@ -26,7 +26,7 @@ public class Movie {
 		
 	}
 
-	public Movie(int volgNummer, int iMDBNummer, String titel, String datum, int duur, String regisseur,
+	public Movie(int volgNummer, String iMDBNummer, String titel, String datum, int duur, String regisseur,
 			String beschrijving) {
 		
 		ratings = new ArrayList<Rating>();
@@ -60,11 +60,11 @@ public class Movie {
 		this.volgNummer = volgNummer;
 	}
 
-	public int getiMDBNummer() {
+	public String getiMDBNummer() {
 		return iMDBNummer;
 	}
 
-	public void setiMDBNummer(int iMDBNummer) {
+	public void setiMDBNummer(String iMDBNummer) {
 		this.iMDBNummer = iMDBNummer;
 	}
 

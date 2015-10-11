@@ -43,12 +43,12 @@ public class FilmsPath {
 	@GET
 	@Path("{imdb-nummer}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response getFilm(@PathParam("imdb-nummer")int nummer,
+	public Response getFilm(@PathParam("imdb-nummer")String nummer,
 			@HeaderParam("Authorization") String accessToken){
 		Model model = (Model) context.getAttribute("model");
 		if(accessTokenExcist(accessToken)){
 			for (Movie m: model.getMovies()){
-				if (m.getiMDBNummer()==nummer){
+				if (m.getiMDBNummer().equals(nummer)){
 					return Response.ok(m).build();
 				}
 			}
@@ -75,7 +75,7 @@ public class FilmsPath {
 	@PUT
 	@Path("rate/{imdb-nummer}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response rateFilm(@PathParam("imdb-nummer") int nummer,
+	public Response rateFilm(@PathParam("imdb-nummer") String nummer,
 			@HeaderParam("Authorization") String accessToken,
 			@FormParam("rating") double rating){
 		Model model = (Model) context.getAttribute("model");
@@ -84,7 +84,7 @@ public class FilmsPath {
 				for(Gebruiker g:model.getGebruikers()){
 					if(g.getAccessToken().equals(accessToken)){
 						for (Movie m: model.getMovies()){
-							if (m.getiMDBNummer()==nummer){
+							if (m.getiMDBNummer().equals(nummer)){
 								for(Rating r:m.getRatings()){
 									if(r.getGebruiker().equals(g)){
 										r.setRating(rating);
@@ -109,14 +109,14 @@ public class FilmsPath {
 	@DELETE
 	@Path("rate/{imdb-nummer")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response deleteRate(@PathParam("imdb-nummer") int nummer,
+	public Response deleteRate(@PathParam("imdb-nummer") String nummer,
 			@HeaderParam("Authorization") String accessToken){
 		Model model = (Model) context.getAttribute("model");
 		if(accessTokenExcist(accessToken)){
 			for(Gebruiker g:model.getGebruikers()){
 				if(g.getAccessToken().equals(accessToken)){
 					for (Movie m: model.getMovies()){
-						if (m.getiMDBNummer()==nummer){
+						if (m.getiMDBNummer().equals(nummer)){
 							for(Rating r:m.getRatings()){
 								if(r.getGebruiker().equals(g)){
 									if(m.deleteRating(r)){
