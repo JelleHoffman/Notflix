@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @XmlRootElement(name = "movie")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Movie {
-	private int volgNummer;
+	@XmlTransient private int volgNummer;
 	private int iMDBNummer;
 	private String titel;
 	private String datum;
@@ -117,6 +117,11 @@ public class Movie {
 	}
 	public void setAverage(double average){
 		this.average=average;
+	}
+
+	public boolean deleteRating(Rating r) {
+		return ratings.remove(r);
+		
 	}
 
 	

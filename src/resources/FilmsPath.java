@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -77,6 +78,39 @@ public class FilmsPath {
 			@HeaderParam("Authorization") String accessToken,
 			@FormParam("rating") double rating){
 		Model model = (Model) context.getAttribute("model");
+		if(rating<=0.5||rating>=5){
+			if(accessTokenExcist(accessToken)){
+				for(Gebruiker g:model.getGebruikers()){
+					if(g.getAccessToken().equals(accessToken)){
+						for (Movie m: model.getMovies()){
+							if (m.getiMDBNummer()==nummer){
+								for(Rating r:m.getRatings()){
+									if(r.getGebruiker().equals(g)){
+										r.setRating(rating);
+										return Response.ok(m).build();
+									}
+								}
+								m.addRating(new Rating(
+										rating,
+										g));
+								return Response.ok(m).build();
+							}
+						}
+						return Response.status(404).build();
+					}
+				}
+			}
+			return Response.status(401).build();
+		}
+		return Response.status(403).build();	
+	}
+	
+	@DELETE
+	@Path("rate/{imdb-nummer")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Response deleteRate(@PathParam("imdb-nummer") int nummer,
+			@HeaderParam("Authorization") String accessToken){
+		Model model = (Model) context.getAttribute("model");
 		if(accessTokenExcist(accessToken)){
 			for(Gebruiker g:model.getGebruikers()){
 				if(g.getAccessToken().equals(accessToken)){
@@ -84,14 +118,14 @@ public class FilmsPath {
 						if (m.getiMDBNummer()==nummer){
 							for(Rating r:m.getRatings()){
 								if(r.getGebruiker().equals(g)){
-									r.setRating(rating);
-									return Response.ok(m).build();
+									if(m.deleteRating(r)){
+										return Response.ok(m).build();
+									}else{
+										return Response.status(500).build();
+									}
 								}
 							}
-							m.addRating(new Rating(
-									rating,
-									g));
-							return Response.ok(m).build();
+							return Response.status(403).build();
 						}
 					}
 					return Response.status(404).build();
