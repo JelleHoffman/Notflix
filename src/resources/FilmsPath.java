@@ -107,7 +107,7 @@ public class FilmsPath {
 	}
 	
 	@DELETE
-	@Path("rate/{imdb-nummer")
+	@Path("rate/{imdb-nummer}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response deleteRate(@PathParam("imdb-nummer") String nummer,
 			@HeaderParam("Authorization") String accessToken){
