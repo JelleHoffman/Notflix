@@ -9,11 +9,19 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Jumbotron Template for Bootstrap</title>
+    <title>Notflix</title>
+    <!-- <script type="text/javascript" src="js/applicatie.js"></script> -->
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 	
     <!-- Own Css -->
     <link href="css/main.css" rel="stylesheet" type="text/css" >
@@ -44,14 +52,58 @@
           
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-        <form class="navbar-form navbar-left">
-        <button type="submit" class="button btn btn-success">Movies</button>
-          <button type="submit" class="button btn btn-success">Users</button>
-          </form>
-          <form class="navbar-form navbar-right">
-            <button type="submit" class="button btn btn-success">Sign in</button>
-            
-          </form>
+        	<div class="form-group">
+        		<form class="navbar-form navbar-left">
+        		
+        			<button type="submit" class="button btn btn-success">Movies</button>
+          			<button id="users" type="submit" class="button btn btn-success">Users</button>
+          			<script>
+          			$(document).ready(function(){
+          				$("#users").click(function(){
+          					var accessToken = localStorage.getItem("accessToken");
+          					if(accessToken!==null){
+          						alert("AccessToken: "+ accessToken);
+          					}else{
+          						alert("you have to log in to see this page")
+          					}
+          					
+          				});
+          			});
+          			</script>
+          		</form>
+          		<form class="navbar-form navbar-right">
+          			<input id="username" type="text" placeholder="Email" class="form-control">
+           		 	<input id="password"type="password" placeholder="Password" class="form-control">
+            		<button id="signIn" type="submit" class="button btn btn-success">Sign in</button>
+            		<script>
+            			$(document).ready(function() {
+            				$("#signIn").click(function(){
+            					var username = $("#username").val();
+            					var password = $("#password").val();
+            					
+            					$.ajax({
+            						type:"GET",
+            						url:"./api/gebruikers/get-accesstoken",
+            						headers:{
+            							"Nickname":username,
+            							"Wachtwoord":password
+            						},
+            						success:function(data){
+            							var accessToken = data;
+            							localStorage.setItem("accessToken", accessToken);
+            							
+            							$.ajax
+            							
+            							alert("Accesstoken: "+data);
+            						},
+            						error:function(code,text,error){
+            							alert(error);            						}
+            					});
+              				});
+            			});
+            		</script>
+          		</form>
+         	</div>
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
@@ -93,12 +145,6 @@
     </div> <!-- /container -->
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    
   </body>
 </html>
