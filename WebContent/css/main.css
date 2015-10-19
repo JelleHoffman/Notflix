@@ -2,6 +2,11 @@
 	color:red;
 	font-weight:bold;
 }
-#navbar{
-	
+
+
+.button{
+	background-color:red;
+	font-weight:bold;
+	border-color: #000000;
 }
+
