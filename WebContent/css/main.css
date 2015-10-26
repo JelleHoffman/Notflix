@@ -15,24 +15,32 @@
 	margin-bottom:5%;
 	margin-top:5%;
 	border:1px solid white;
+	position: relative;
+	left: 2%;
+	
 	
 }
 
-#filmFrame h2{
+.filmFrame h2{
 	margin:0;
 	font-weight: bold;
 }
-#filmFrame h3{
+.filmFrame h3{
 	margin-top: 0.4%;
 }
-#filmFrame{
+
+.filmFrame{
 	background-color: #ddd;
-	margin-left:0.5%;
-	margin-right:0.5%;
-	margin-top:1%;
-	margin-bottom:1%;
-	padding-bottom: 1%;
-	height: 100%;
+	margin:0.5%;
+	width:24%;
+	float:left;
+	display: inline-block;
+	vertical-align: top;
+	overflow: hidden;
+	
+}
+#mainContent{
+	overflow: hidden;
 }
 div.stars {
   width: 270px;
