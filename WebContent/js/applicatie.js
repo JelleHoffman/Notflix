@@ -152,10 +152,12 @@ function getFilms(){
 function filmClick(){
 	$(document).on("click",".filmFrame",function(){
 		var imdb = $(this).attr("id");
+		alert(imdb);
+		
 		var content = $("#mainContent");
 		
 		content.clear();
-		alert(imdb);
+		
 	});
 }
 
@@ -227,4 +229,6 @@ function userList(){
 			});
 		
 }
+
+
 
