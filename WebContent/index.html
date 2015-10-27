@@ -59,11 +59,13 @@
         	<div class="form-group">
         		<form class="navbar-form navbar-left">
         		
-        			<button type="submit" class="button btn btn-success">Movies</button>
+        			<button id="movies"type="submit" class="button btn btn-success">Movies</button>
           			<button id="users" type="submit" class="button btn btn-success">Users</button>
           			<script>
           			$(document).ready(function(){
           				localStorage.clear();
+          				$("#users").hide();
+          				$("#movies").hide();
           				$("#users").click(function(){
           					var accessToken = localStorage.getItem("accessToken");
           					if(accessToken!==null){
@@ -98,6 +100,8 @@
             							localStorage.setItem("accessToken", accessToken);          							
             							alert("Accesstoken: "+data);
             							getFilms();
+            							$("#users").show();
+            							$("#movies").show();
             						},
             						error:function(jqXHR,settings,error){
             							alert(error);            						
