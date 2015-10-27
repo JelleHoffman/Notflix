@@ -17,6 +17,8 @@
 	border:1px solid white;
 	position: relative;
 	left: 2%;
+	width: 17em;
+	height: 30em;
 	
 	
 }
@@ -38,6 +40,11 @@
 	vertical-align: top;
 	overflow: hidden;
 	
+}
+
+.filmFrame:hover{
+	cursor: pointer;
+	cursor: hand;
 }
 #mainContent{
 	overflow: hidden;
@@ -64,4 +71,8 @@ input.star:checked ~ label.star:before {
 }
 label.star:before {
   content: '\2605';
+}
+
+.user {
+	background-color: #ddd;
 }
