@@ -4,16 +4,27 @@
 
 function documentReady() {
 	$(document).ready(function() {
-		$("#moviesBtn").hide();
-		$("#usersBtn").hide();
+		var accessToken = localStorage.getItem("accessToken");
+		if(accessToken==null){
+			$("#moviesBtn").hide();
+			$("#usersBtn").hide();
+		}else{
+			$("#usersBtn").show();
+			$("#moviesBtn").hide();
+			$("#username").hide();
+			$("#password").hide();
+			$("#signIn").hide();
+		}
 		getFilms();
 		signIn();
 		filmClick();
 		userBtnClick();
+		moviesBtnClick();
+		
 	});
 }
 
-function singIn(){
+function signIn(){
 	$("#signIn").click(function(){
 		var username = $("#username").val();
 		var password = $("#password").val();
@@ -29,10 +40,12 @@ function singIn(){
 				var accessToken = data;
 				localStorage.setItem("accessToken", accessToken);          							
 				getFilms();
+				userList();
+				
 				$("#usersBtn").show();
-				$("#moviesBtn").show();
 				$("#username").hide();
 				$("#password").hide();
+				$("#signIn").hide();
 				
 			},
 			error:function(jqXHR,settings,error){
@@ -52,7 +65,7 @@ function getFilms(){
 			var urlHeaders;
 			
 			content.empty();
-			
+			alert(accessToken);
 			
 			if(accessToken==null){
 				apiUrl ="./api/film/ratings";
@@ -118,11 +131,7 @@ function getFilms(){
 									"</div>"+
 									"</div>");
 								
-								//rating meegeven
-								//var rating = value.average;
-								//if(value>==1){
-									
-								//}
+								
 									
 							},
 							error:function(jqXHR,settings,error){
@@ -141,16 +150,20 @@ function getFilms(){
 }
 
 function filmClick(){
-	
+	$(document).on("click",".filmFrame",function(){
 		var imdb = $(this).attr("id");
+		var content = $("#mainContent");
 		
+		content.clear();
 		alert(imdb);
-	
+	});
 }
 
 function userBtnClick(){
 	$("#usersBtn").click(function(){
-			
+		$("#moviesBtn").show();
+		alert("ik ben in user btn click")
+		
 			var accessToken = localStorage.getItem("accessToken");
 			if(accessToken!==null){
 				window.location.href = "users.html";
@@ -159,5 +172,59 @@ function userBtnClick(){
 			}
 			
 		});
+}
+
+function moviesBtnClick(){
+	$("#moviesBtn").click(function(){
+		$("#usersBtn").show();
+		alert("ik ben in movie btn click");
+		window.location.href = "index.html";
+			
+		});
+}
+
+function userList(){
+			
+			$("#usersBtn").hide();
+			
+			var content = $("#usersList");
+			var accessToken = localStorage.getItem("accessToken");
+			
+			alert(accessToken);
+			
+			$.ajax({
+				type:"GET",
+				url:"./api/gebruikers",
+				headers:{
+					Accept:"application/json; charset=utf-8",
+					"Authorization":accessToken
+				},
+				success:function(data){
+					$.each(data,function(index,value){
+						var tussenvoegsel = value.tussenvoegsel;
+						if(tussenvoegsel == "" || tussenvoegsel == null){
+							content.append(
+									"<div class='user'>"+
+									"<h1>"+value.nickname+"</h1>"+
+									"<h2>"+value.voornaam+" "+value.achternaam+"</h2>"+
+									"</div>");	
+						}else{
+							content.append(
+									"<div class='user'>"+
+									"<h1>"+value.nickname+"</h1>"+
+									"<h2>"+value.voornaam+" "+value.tussenvoegsel+" "+value.achternaam+"</h2>"+
+									"</div>");	
+						}
+							
+							
+						
+						
+					});
+				},
+				error:function(jqXHR,settings,error){
+					alert("error in getUsers "+error);
+				}
+			});
+		
 }
 

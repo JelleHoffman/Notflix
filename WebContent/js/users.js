@@ -1,45 +1,41 @@
 /**
  * 
  */
-
-function userList(){
+function documentReady(){
 	$(document).ready(function(){
-			var content = $("#usersList");
-			var accessToken = localStorage.getItem("accessToken");
-			
-			
-			$.ajax({
-				type:"GET",
-				url:"./api/gebruikers",
-				headers:{
-					Accept:"application/json; charset=utf-8",
-					"Authorization":accessToken
-				},
-				success:function(data){
-					$.each(data,function(index,value){
-						var tussenvoegsel = value.tussenvoegsel;
-						if(tussenvoegsel == "" || tussenvoegsel == null){
-							content.append(
-									"<div class='user'>"+
-									"<h1>"+value.nickname+"</h1>"+
-									"<h2>"+value.voornaam+" "+value.achternaam+"</h2>"+
-									"</div>");	
-						}else{
-							content.append(
-									"<div class='user'>"+
-									"<h1>"+value.nickname+"</h1>"+
-									"<h2>"+value.voornaam+" "+value.tussenvoegsel+" "+value.achternaam+"</h2>"+
-									"</div>");	
-						}
-							
-							
-						
-						
-					});
-				},
-				error:function(jqXHR,settings,error){
-					alert("error in getUsers "+error);
-				}
-			});
+		signIn();
+		userList();
+	});
+}
+
+
+function signIn(){
+	$("#signIn").click(function(){
+		var username = $("#username").val();
+		var password = $("#password").val();
+		
+		$.ajax({
+			type:"GET",
+			url:"./api/gebruikers/get-accesstoken",
+			headers:{
+				"Nickname":username,
+				"Wachtwoord":password
+			},
+			success:function(data){
+				var accessToken = data;
+				localStorage.setItem("accessToken", accessToken);          							
+				getFilms();
+				$("#usersBtn").show();
+				$("#moviesBtn").show();
+				$("#username").hide();
+				$("#password").hide();
+				
+			},
+			error:function(jqXHR,settings,error){
+				alert("error in de sign in")
+				alert(error);            						
+			}
 		});
+		});
+	
 }
