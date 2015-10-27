@@ -2,16 +2,50 @@
  *Yolo 
  */
 
-function singIn(){
+function documentReady() {
 	$(document).ready(function() {
-		$(".button").submit(function(){
-			 alert("gelukt");
-			});
+		$("#moviesBtn").hide();
+		$("#usersBtn").hide();
+		getFilms();
+		signIn();
+		filmClick();
+		userBtnClick();
 	});
 }
 
+function singIn(){
+	$("#signIn").click(function(){
+		var username = $("#username").val();
+		var password = $("#password").val();
+		
+		$.ajax({
+			type:"GET",
+			url:"./api/gebruikers/get-accesstoken",
+			headers:{
+				"Nickname":username,
+				"Wachtwoord":password
+			},
+			success:function(data){
+				var accessToken = data;
+				localStorage.setItem("accessToken", accessToken);          							
+				getFilms();
+				$("#usersBtn").show();
+				$("#moviesBtn").show();
+				$("#username").hide();
+				$("#password").hide();
+				
+			},
+			error:function(jqXHR,settings,error){
+				alert("error in de sign in")
+				alert(error);            						
+			}
+		});
+		});
+	
+}
+
 function getFilms(){
-	$(document).ready(function(){
+
 			var content = $("#mainContent");
 			var accessToken = localStorage.getItem("accessToken");
 			var apiUrl;
@@ -103,14 +137,27 @@ function getFilms(){
 					alert("error in getFilms"+error+settings);
 				}
 			});
-		});
+		
 }
 
-function filmclick(){
-	$(document).on("click",".filmFrame", function(){
+function filmClick(){
+	
 		var imdb = $(this).attr("id");
 		
 		alert(imdb);
-	});
+	
+}
+
+function userBtnClick(){
+	$("#usersBtn").click(function(){
+			
+			var accessToken = localStorage.getItem("accessToken");
+			if(accessToken!==null){
+				window.location.href = "users.html";
+			}else{
+				alert("you have to log in to see this page")
+			}
+			
+		});
 }
 
