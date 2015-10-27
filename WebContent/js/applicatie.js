@@ -17,32 +17,33 @@ function getFilms(){
 			var apiUrl;
 			var urlHeaders;
 			
-			alert(accessToken);
+			content.empty();
+			
 			
 			if(accessToken==null){
-				alert("in de if");
 				apiUrl ="./api/film/ratings";
-				urlHeaders = {
-					Accept:"application/json; charset=utf-8",
-				};
+				urlHeaders = {Accept:"application/json; charset=utf-8"};
 			}else{
-				alert("in de else");
 				apiUrl ="./api/film";
-				urlHeaders = {
-					Accept:"application/json; charset=utf-8",
-					Authorization:accessToken,
-				};
+				urlHeaders = {Accept:"application/json; charset=utf-8","Authorization":accessToken};
 			};
+			
 			
 			$.ajax({
 				type:"GET",
 				url:apiUrl,
 				headers:urlHeaders,
+				 
 				success:function(data){
 					$.each(data,function(index,value){
 						var title = value.titel;
 						var imdbId = value.iMDBNummer;
 						var poster;
+						var average = parseFloat(value.average);
+	
+						if(average === NaN){
+							average = "Zero Ratings";
+						};
 						
 						$.ajax({
 							type:"GET",
@@ -58,10 +59,10 @@ function getFilms(){
 									var shortTitle = title;
 								}
 								//film object toevoegen
+								
 								content.append(
-									"<div class='filmFrame col-md-3'>"+
+									"<div id='"+value.iMDBNummer+"'class='filmFrame col-md-3'>"+
 									"<img id='filmPoster' class='col-md-10' alt='"+title+"'src="+poster+">"+
-									
 									"<h2 id='title'>"+shortTitle+"</h2>"+
 									"<h3 id='regiseur'>"+value.regisseur+"</h3>"+
 									"<h4 id='time'>Minutes: "+value.duur+"</h4>"+
@@ -69,16 +70,16 @@ function getFilms(){
 									"<h4 id='average'>Rating: "+value.average+"</h4>"+
 									"<div class='stars'>"+
 						  			"<form action=''>"+
-								    "<input class='star star-5' id='star-5' type='radio' name='star'/>"+
-								    "<label class='star star-5' for='star-5'></label>"+
-								  	"<input class='star star-4' id='star-4' type='radio' name='star'/>"+
-							    "<label class='star star-4' for='star-4'></label>"+
-							    "<input class='star star-3' id='star-3' type='radio' name='star'/>"+
-								    "<label class='star star-3' for='star-3'></label>"+
-								  	"<input class='star star-2' id='star-2' type='radio' name='star'/>"+
-							    "<label class='star star-2' for='star-2'></label>"+
-							    "<input class='star star-1' id='star-1' type='radio' name='star'/>"+
-								    "<label class='star star-1' for='star-1'></label>"+
+								    "<input class='star star-5' id='5-'"+value.iMDBNummer+" type='radio' name='star'/>"+
+								    "<label class='star star-5' for='5-'"+value.iMDBNummer+"'></label>"+
+								  	"<input class='star star-4' id='4-'"+value.iMDBNummer+" type='radio' name='star'/>"+
+								  	"<label class='star star-4' for='4-'"+value.iMDBNummer+"'></label>"+
+								  	"<input class='star star-3' id='3-'"+value.iMDBNummer+" type='radio' name='star'/>"+
+								    "<label class='star star-3' for='3-'"+value.iMDBNummer+"'></label>"+
+								  	"<input class='star star-2' id='2-'"+value.iMDBNummer+" type='radio' name='star'/>"+
+								  	"<label class='star star-2' for='2-'"+value.iMDBNummer+"'></label>"+
+								  	"<input class='star star-1' id='1-'"+value.iMDBNummer+" type='radio' name='star'/>"+
+								    "<label class='star star-1' for='1-'"+value.iMDBNummer+"'></label>"+
 						 			"</form>"+
 									"</div>"+
 									"</div>");
@@ -91,7 +92,7 @@ function getFilms(){
 									
 							},
 							error:function(jqXHR,settings,error){
-								alert(error);
+								alert("error in getFilms poster"+error);
 							}
 						});
 						
@@ -104,3 +105,12 @@ function getFilms(){
 			});
 		});
 }
+
+function filmclick(){
+	$(document).on("click",".filmFrame", function(){
+		var imdb = $(this).attr("id");
+		
+		alert(imdb);
+	});
+}
+
