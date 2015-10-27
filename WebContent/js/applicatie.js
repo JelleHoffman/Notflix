@@ -4,6 +4,7 @@
 
 function documentReady() {
 	$(document).ready(function() {
+		localStorage.clear();
 		var accessToken = localStorage.getItem("accessToken");
 		if(accessToken==null){
 			$("#moviesBtn").hide();
@@ -151,14 +152,76 @@ function getFilms(){
 
 function filmClick(){
 	$(document).on("click",".filmFrame",function(){
+		$("#mainContent").hide();
 		var imdb = $(this).attr("id");
 		alert(imdb);
 		
-		var content = $("#mainContent");
+		var content = $("#filmdetail");
 		
-		content.clear();
-		
+		var accessToken = localStorage.getItem("accessToken");
+		alert(accessToken);
+		$.ajax({ 
+		    type: 'GET',
+		    url: "./api/film/" + imdb, 
+		    headers:{
+		    	Accept:"application/json; charset=utf-8",
+		    	"Authorization":accessToken},
+		    success:function(movie){
+					var title = movie.titel;
+					
+					var poster;
+					var average = parseFloat(movie.average);
+
+					if(average === NaN){
+						average = "Zero Ratings";
+					};
+					
+					
+					$.ajax({
+						type:"GET",
+						url:("http://www.omdbapi.com/?i="+imdb),
+						success:function(data){
+							
+							poster = data.Poster;
+							
+							
+							
+							$("#filmdetail").append(
+								"<div class='filmDetail'>"+
+								"<img id='poster' alt='"+title+"'src='"+poster+"'>"+
+								"<h2 id='title'>"+title+"</h2>"+
+								"<h3 id='regiseur'>"+movie.regisseur+"</h3>"+
+								"<h4 id='time'>Minutes: "+movie.duur+"</h4>"+
+								"<h4 id='releaseDate'>Release date: "+movie.datum+"</h4>"+
+								"<h4 id='average'>Rating: "+movie.average+"</h4>"+
+								"<p id='beschrijving'>"+movie.beschrijving+"</p>"+
+								"<div class='stars'>"+
+					  			"<form action=''>"+
+							    "<input class='star star-5' id='5-'"+movie.iMDBNummer+" type='radio' name='star'/>"+
+							    "<label class='star star-5' for='5-'"+movie.iMDBNummer+"'></label>"+
+							  	"<input class='star star-4' id='4-'"+movie.iMDBNummer+" type='radio' name='star'/>"+
+							  	"<label class='star star-4' for='4-'"+movie.iMDBNummer+"'></label>"+
+							  	"<input class='star star-3' id='3-'"+movie.iMDBNummer+" type='radio' name='star'/>"+
+							    "<label class='star star-3' for='3-'"+movie.iMDBNummer+"'></label>"+
+							  	"<input class='star star-2' id='2-'"+movie.iMDBNummer+" type='radio' name='star'/>"+
+							  	"<label class='star star-2' for='2-'"+movie.iMDBNummer+"'></label>"+
+							  	"<input class='star star-1' id='1-'"+movie.iMDBNummer+" type='radio' name='star'/>"+
+							    "<label class='star star-1' for='1-'"+movie.iMDBNummer+"'></label>"+
+					 			"</form>"+
+								"</div>"+
+								"</div>");
+						},
+						error:function(jqXHR,settings,error){
+							alert("error in get poster film"+error+settings);
+						}
+					});
+		    },
+				error:function(jqXHR,settings,error){
+					alert("error in get specific film"+error+settings);
+				}
+		});
 	});
+	  
 }
 
 function userBtnClick(){

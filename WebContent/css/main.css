@@ -17,6 +17,7 @@
 	border:1px solid white;
 	position: relative;
 	left: 2%;
+	float:left;
 	width: 17em;
 	height: 30em;
 	
@@ -75,4 +76,9 @@ label.star:before {
 
 .user {
 	background-color: #ddd;
+}
+
+.filmdetail{
+	clear: both;
+	overflow: hidden;
 }

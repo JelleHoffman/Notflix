@@ -1,5 +1,6 @@
 package resources;
 
+import java.io.Console;
 import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
@@ -45,6 +46,7 @@ public class FilmsPath {
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response getFilm(@PathParam("imdb-nummer")String nummer,
 			@HeaderParam("Authorization") String accessToken){
+		System.out.println("imdb nummer in get film"+accessToken);
 		Model model = (Model) context.getAttribute("model");
 		if(accessTokenExcist(accessToken)){
 			for (Movie m: model.getMovies()){
