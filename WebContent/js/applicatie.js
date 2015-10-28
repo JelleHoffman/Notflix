@@ -2,28 +2,28 @@
  *Yolo 
  */
 
-function documentReady() {
-	$(document).ready(function() {
-		localStorage.clear();
-		var accessToken = localStorage.getItem("accessToken");
-		if(accessToken==null){
-			$("#moviesBtn").hide();
-			$("#usersBtn").hide();
-		}else{
-			$("#usersBtn").show();
-			$("#moviesBtn").hide();
-			$("#username").hide();
-			$("#password").hide();
-			$("#signIn").hide();
-		}
-		getFilms();
-		signIn();
-		userBtnClick();
-		moviesBtnClick();
-		filmClick();
-		
-	});
-}
+
+$(document).ready(function() {
+	var accessToken = localStorage.getItem("accessToken");
+	if(accessToken==null){
+		$("#moviesBtn").hide();
+		$("#usersBtn").hide();
+	}else{
+		$("#usersBtn").show();
+		$("#moviesBtn").hide();
+		$("#username").hide();
+		$("#password").hide();
+		$("#signIn").hide();
+	}
+	getFilms();
+	signIn();
+	userBtnClick();
+	moviesBtnClick();
+	filmClick();
+	logoutClick();
+	
+});
+
 
 function signIn(){
 	$("#signIn").click(function(){
@@ -88,8 +88,8 @@ function getFilms(){
 						var imdbId = value.iMDBNummer;
 						var poster;
 						var average = parseFloat(value.average);
-	
-						if(average === NaN){
+						
+						if(average == 0){
 							average = "Zero Ratings";
 						};
 						
@@ -110,7 +110,7 @@ function getFilms(){
 								
 								content.append(
 									"<div id='"+value.iMDBNummer+"'class='filmFrame col-md-3'>"+
-									"<img id='filmPoster' class='col-md-10' alt='"+title+"'src="+poster+">"+
+									"<img id='filmPoster' class='col-md-10' alt='"+title.replace("'","-")+"'src="+poster+">"+
 									"<h2 id='title'>"+shortTitle+"</h2>"+
 									"<h3 id='regiseur'>"+value.regisseur+"</h3>"+
 									"<h4 id='time'>Minutes: "+value.duur+"</h4>"+
@@ -144,7 +144,11 @@ function getFilms(){
 					});
 				},
 				error:function(jqXHR,settings,error){
-					alert("error in getFilms"+error+settings);
+					if(error == "Unauthorized"){
+						localStorage.clear();
+						window.location.href = "index.html";
+					}
+					
 				}
 			});
 		
@@ -173,7 +177,7 @@ function filmClick(){
 						var deleteRate;
 						var array = movie.ratings;
 						for(i=0;i<array.length;i++){
-							var object = array[i];
+							var object = array[i].rating;
 							alert("het lukt, delete");
 						}
 						
@@ -196,7 +200,7 @@ function filmClick(){
 								
 								$("#filmdetail").append(
 									"<div class='filmDetail'>"+
-									"<img id='poster' alt='"+title+"'src='"+poster+"'>"+
+									"<img id='poster' alt='"+title.replace("'","-")+"'src='"+poster+"'>"+
 									"<h2 id='title'>Title: "+title+"</h2>"+
 									"<h3 id='regiseur'>Director: "+movie.regisseur+"</h3>"+
 									"<h4 id='time'>Minutes: "+movie.duur+"</h4>"+
@@ -298,6 +302,13 @@ function rateClick(imdb){
 		}else {
 			alert("rating has to between 0.5 en 5");
 		}
+	});
+}
+
+function logoutClick(){
+	$("#signOut").click(function(){
+		localStorage.clear();
+		window.location.href = "index.html";
 	});
 }
 

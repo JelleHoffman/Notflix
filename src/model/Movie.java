@@ -108,10 +108,15 @@ public class Movie {
 	
 	public double getAverage(){
 		double total = 0;
-		for (Rating r:ratings){
-			total += r.getRating();
+		if(ratings.size()!=0){
+			for (Rating r:ratings){
+				total += r.getRating();
+			}
+			average = (total/(double)ratings.size());
+		}else{
+			average = 0;
 		}
-		average = (total/(double)ratings.size());
+		
 		return average;
 	}
 	public void setAverage(double average){
