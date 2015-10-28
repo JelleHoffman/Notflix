@@ -45,8 +45,6 @@ public class Movie {
 		ratings.add(rating);
 	}
 	
-	@JsonIgnore
-	@XmlTransient 
 	public ArrayList<Rating> getRatings() {
 		return ratings;
 	}

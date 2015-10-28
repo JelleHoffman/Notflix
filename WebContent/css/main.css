@@ -82,3 +82,15 @@ label.star:before {
 	clear: both;
 	overflow: hidden;
 }
+
+#rateForm{
+	display: inline;
+}
+#rateBox{
+	float: left;
+	width: 40%;
+}
+
+#rateBtn{
+	float: left;
+}
