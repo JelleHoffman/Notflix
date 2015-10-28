@@ -8,15 +8,18 @@ $(document).ready(function() {
 	if(accessToken==null){
 		$("#moviesBtn").hide();
 		$("#usersBtn").hide();
+		$("#signOut").hide();
 	}else{
 		$("#usersBtn").show();
-		$("#moviesBtn").hide();
+		$("#moviesBtn").show();
+		$("#signOut").show();
 		$("#username").hide();
 		$("#password").hide();
 		$("#signIn").hide();
 	}
-	getFilms();
+	
 	signIn();
+	getFilms();
 	userBtnClick();
 	moviesBtnClick();
 	filmClick();
@@ -44,6 +47,8 @@ function signIn(){
 				userList();
 				
 				$("#usersBtn").show();
+				$("#moviesBtn").show();
+				$("#signOut").show();
 				$("#username").hide();
 				$("#password").hide();
 				$("#signIn").hide();
@@ -59,7 +64,8 @@ function signIn(){
 }
 
 function getFilms(){
-
+			
+			
 			var content = $("#mainContent");
 			var accessToken = localStorage.getItem("accessToken");
 			var apiUrl;
@@ -83,7 +89,10 @@ function getFilms(){
 				headers:urlHeaders,
 				 
 				success:function(data){
+					$("#moviesBtn").hide();
 					$.each(data,function(index,value){
+						
+						
 						var title = value.titel;
 						var imdbId = value.iMDBNummer;
 						var poster;
@@ -314,7 +323,7 @@ function logoutClick(){
 
 function userList(){
 			
-			$("#usersBtn").hide();
+			
 			
 			var content = $("#usersList");
 			var accessToken = localStorage.getItem("accessToken");
@@ -329,6 +338,8 @@ function userList(){
 					"Authorization":accessToken
 				},
 				success:function(data){
+					$("#moviesBtn").show();
+					$("#usersBtn").hide();
 					$.each(data,function(index,value){
 						var tussenvoegsel = value.tussenvoegsel;
 						if(tussenvoegsel == "" || tussenvoegsel == null){
