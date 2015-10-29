@@ -42,16 +42,18 @@ function signIn(){
 			},
 			success:function(data){
 				var accessToken = data;
-				localStorage.setItem("accessToken", accessToken);          							
-				getFilms();
-				userList();
-				
+				localStorage.setItem("accessToken", accessToken); 
+				localStorage.setItem("username",username);
 				$("#usersBtn").show();
 				$("#moviesBtn").show();
 				$("#signOut").show();
 				$("#username").hide();
 				$("#password").hide();
 				$("#signIn").hide();
+				
+				getFilms();
+				
+				
 				
 			},
 			error:function(jqXHR,settings,error){
@@ -73,6 +75,7 @@ function getFilms(){
 			
 			content.empty();
 			alert(accessToken);
+			
 			
 			if(accessToken==null){
 				apiUrl ="./api/film/ratings";
@@ -98,7 +101,7 @@ function getFilms(){
 						var poster;
 						var average = parseFloat(value.average);
 						
-						if(average == 0){
+						if(average === 0){
 							average = "Zero Ratings";
 						};
 						
@@ -124,21 +127,7 @@ function getFilms(){
 									"<h3 id='regiseur'>"+value.regisseur+"</h3>"+
 									"<h4 id='time'>Minutes: "+value.duur+"</h4>"+
 									"<h4 id='releaseDate'>Release date: "+value.datum+"</h4>"+
-									"<h4 id='average'>Rating: "+value.average+"</h4>"+
-									"<div class='stars'>"+
-						  			"<form action=''>"+
-								    "<input class='star star-5' id='5-'"+value.iMDBNummer+" type='radio' name='star'/>"+
-								    "<label class='star star-5' for='5-'"+value.iMDBNummer+"'></label>"+
-								  	"<input class='star star-4' id='4-'"+value.iMDBNummer+" type='radio' name='star'/>"+
-								  	"<label class='star star-4' for='4-'"+value.iMDBNummer+"'></label>"+
-								  	"<input class='star star-3' id='3-'"+value.iMDBNummer+" type='radio' name='star'/>"+
-								    "<label class='star star-3' for='3-'"+value.iMDBNummer+"'></label>"+
-								  	"<input class='star star-2' id='2-'"+value.iMDBNummer+" type='radio' name='star'/>"+
-								  	"<label class='star star-2' for='2-'"+value.iMDBNummer+"'></label>"+
-								  	"<input class='star star-1' id='1-'"+value.iMDBNummer+" type='radio' name='star'/>"+
-								    "<label class='star star-1' for='1-'"+value.iMDBNummer+"'></label>"+
-						 			"</form>"+
-									"</div>"+
+									"<h4 id='average'>Rating: "+average+"</h4>"+
 									"</div>");
 								
 								
@@ -175,6 +164,7 @@ function filmClick(){
 		alert(accessToken);
 		if(accessToken!=null){
 			$("#mainContent").hide();
+			$("#moviesBtn").show();
 			$.ajax({ 
 			    type: 'GET',
 			    url: "./api/film/" + imdb, 
@@ -185,15 +175,11 @@ function filmClick(){
 						var title = movie.titel;
 						var deleteRate;
 						var array = movie.ratings;
-						for(i=0;i<array.length;i++){
-							var object = array[i].rating;
-							alert("het lukt, delete");
-						}
 						
 						var poster;
 						var average = parseFloat(movie.average);
 
-						if(average === NaN){
+						if(average === 0){
 							average = "Zero Ratings";
 						};
 						
@@ -214,28 +200,33 @@ function filmClick(){
 									"<h3 id='regiseur'>Director: "+movie.regisseur+"</h3>"+
 									"<h4 id='time'>Minutes: "+movie.duur+"</h4>"+
 									"<h4 id='releaseDate'>Release date: "+movie.datum+"</h4>"+
-									"<h4 id='average'>Rating: "+movie.average+"</h4>"+
+									"<h4 id='average'>Rating: "+average+"</h4>"+
 									"<p id='beschrijving'>Description: "+movie.beschrijving+"</p>"+
 									"<form id='rateForm' class='form'>"+
 									"<input id='rateBox' type='number'  class='form-control' placeholder='Rate this film, number has to be between 0.5 en 5'>"+
 									"<button id='rateBtn' type='button' class='button btn btn-success'>Rate</button>"+
+									"<button id='deleteButton' type='button' class='button btn btn-success'>Delete your own rating</button>"+
 									"</form>"+
-									"<div class='stars'>"+
-						  			"<form action=''>"+
-								    "<input class='star star-5' id='5-'"+movie.iMDBNummer+" type='radio' name='star'/>"+
-								    "<label class='star star-5' for='5-'"+movie.iMDBNummer+"'></label>"+
-								  	"<input class='star star-4' id='4-'"+movie.iMDBNummer+" type='radio' name='star'/>"+
-								  	"<label class='star star-4' for='4-'"+movie.iMDBNummer+"'></label>"+
-								  	"<input class='star star-3' id='3-'"+movie.iMDBNummer+" type='radio' name='star'/>"+
-								    "<label class='star star-3' for='3-'"+movie.iMDBNummer+"'></label>"+
-								  	"<input class='star star-2' id='2-'"+movie.iMDBNummer+" type='radio' name='star'/>"+
-								  	"<label class='star star-2' for='2-'"+movie.iMDBNummer+"'></label>"+
-								  	"<input class='star star-1' id='1-'"+movie.iMDBNummer+" type='radio' name='star'/>"+
-								    "<label class='star star-1' for='1-'"+movie.iMDBNummer+"'></label>"+
-						 			"</form>"+
-									"</div>"+
 									"</div>");
 								
+								$("#deleteButton").hide();
+								if(array.length > 0){
+									alert(array[0]);
+									for(var i=0;i<array.length;i++){
+										alert("het lukt, delete");
+										var object = array[i];
+										console.dir(object);
+										var username = localStorage.getItem("username");
+										if(username == object.gebruiker.nickname){
+											alert(object.gebruiker);
+											$("#deleteButton").show();
+											deleteRatingClick(imdb);
+											
+										}
+										
+										
+									}
+								};
 								rateClick(imdb);
 								
 							},
@@ -254,6 +245,30 @@ function filmClick(){
 		
 	});
 	  
+}
+
+function deleteRatingClick(imdb){
+	$("#deleteButton").click(function(){
+		alert("delete clicked"+imdb);
+		
+		var accessToken = localStorage.getItem("accessToken");
+		
+		$.ajax({
+			type:"DELETE",
+			url:"./api/film/rate/"+imdb,
+			headers:{
+				"Authorization":accessToken
+			},
+			success:function(data){
+				getFilms();
+				$("#mainContent").show();
+				$("filmdetail").hide();
+			},
+			error:function(jqXHR,settings,error){
+				alert("error in delete film "+error)
+			}
+		});
+	});
 }
 
 function userBtnClick(){
@@ -323,49 +338,49 @@ function logoutClick(){
 
 function userList(){
 			
-			
-			
-			var content = $("#usersList");
-			var accessToken = localStorage.getItem("accessToken");
-			
-			alert(accessToken);
-			
-			$.ajax({
-				type:"GET",
-				url:"./api/gebruikers",
-				headers:{
-					Accept:"application/json; charset=utf-8",
-					"Authorization":accessToken
-				},
-				success:function(data){
-					$("#moviesBtn").show();
-					$("#usersBtn").hide();
-					$.each(data,function(index,value){
-						var tussenvoegsel = value.tussenvoegsel;
-						if(tussenvoegsel == "" || tussenvoegsel == null){
-							content.append(
-									"<div class='user'>"+
-									"<h1>"+value.nickname+"</h1>"+
-									"<h2>"+value.voornaam+" "+value.achternaam+"</h2>"+
-									"</div>");	
-						}else{
-							content.append(
-									"<div class='user'>"+
-									"<h1>"+value.nickname+"</h1>"+
-									"<h2>"+value.voornaam+" "+value.tussenvoegsel+" "+value.achternaam+"</h2>"+
-									"</div>");	
-						}
-							
-							
-						
-						
-					});
-				},
-				error:function(jqXHR,settings,error){
-					alert("error in getUsers "+error);
+$(document).ready(function(){
+	var content = $("#usersList");
+	var accessToken = localStorage.getItem("accessToken");
+	
+	alert(accessToken);
+	
+	$.ajax({
+		type:"GET",
+		url:"./api/gebruikers",
+		headers:{
+			Accept:"application/json; charset=utf-8",
+			"Authorization":accessToken
+		},
+		success:function(data){
+			$("#moviesBtn").show();
+			$("#signOut").show();
+			$("#usersBtn").hide();
+			$.each(data,function(index,value){
+				var tussenvoegsel = value.tussenvoegsel;
+				if(tussenvoegsel == "" || tussenvoegsel == null){
+					content.append(
+							"<div class='user'>"+
+							"<h1>"+value.nickname+"</h1>"+
+							"<h2>"+value.voornaam+" "+value.achternaam+"</h2>"+
+							"</div>");	
+				}else{
+					content.append(
+							"<div class='user'>"+
+							"<h1>"+value.nickname+"</h1>"+
+							"<h2>"+value.voornaam+" "+value.tussenvoegsel+" "+value.achternaam+"</h2>"+
+							"</div>");	
 				}
+					
+					
+				
+				
 			});
-		
+		},
+		error:function(jqXHR,settings,error){
+			alert("error in getUsers "+error);
+		}
+	});
+});
 }
 
 

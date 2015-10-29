@@ -26,7 +26,7 @@ public class PersonPath {
 	@Context ServletContext context;
 
 	@POST
-	@Path("/add-gebruiker")
+	@Path("add-gebruiker")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response addGebruiker(Gebruiker gebruiker, @HeaderParam ("Wachtwoord") String wachtwoord) {
