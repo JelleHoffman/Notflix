@@ -368,30 +368,45 @@ function userList(){
 function registerSubmitClick() {
 	
 	$("#registerSubmitBtn").click(function() {
+		alert("sumbit is geclicked");
+		
 	var firstnameReg = $("#firstnameReg").val();
+	var additionReg = $("#additionReg").val();
 	var lastnameReg = $("#lastnameReg").val();
 	var nicknameReg = $("#nicknameReg").val();
 	var passwordReg = $("#passwordReg").val();
 	
+	if(firstnameReg != "" && lastnameReg != "" && nicknameReg != "" && passwordReg != "") {
 	$.ajax({
 		type:"POST",
 		url: "./api/gebruikers/add-gebruiker",
-			Headers: {
+			headers: {
+				"Content-Type":"application/json;charset=utf-8",
+				"Wachtwoord":passwordReg,
 				"Voornaam":firstnameReg,
+				"Tussenvoegsel":additionReg,
 				"Achternaam":lastnameReg,
 				"Nickname":nicknameReg,
-				"Wachtwoord":passwordReg,
-				
-			}
-	,
-		succes:function(data) {
+					
+			},
+			
+			
+		success:function(data) {
+			
+			alert("succesvol geregistreerd");
 			window.location.href = "index.html";
+		
+				
+			
 		},
 		error:function(jqXHR,settings,error){
 			alert("error in de register");
 			alert(error);
 		}
 	});
+	}else{
+		alert("Onjuiste invoergegevens. Vul alle velden correct in!");
+	}
 	});
 }
 
