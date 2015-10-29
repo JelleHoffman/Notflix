@@ -16,6 +16,7 @@ $(document).ready(function() {
 		$("#username").hide();
 		$("#password").hide();
 		$("#signIn").hide();
+		$("#register").hide();
 	}
 	
 	signIn();
@@ -52,6 +53,7 @@ function signIn(){
 				$("#username").hide();
 				$("#password").hide();
 				$("#signIn").hide();
+				$("#register").hide();
 				
 				getFilms();
 				
@@ -76,7 +78,6 @@ function getFilms(){
 			var urlHeaders;
 			
 			content.empty();
-			alert(accessToken);
 			
 			
 			if(accessToken==null){
@@ -97,6 +98,7 @@ function getFilms(){
 					$("#moviesBtn").hide();
 					$.each(data,function(index,value){
 						
+						$("#filmdetail").hide();
 						
 						var title = value.titel;
 						var imdbId = value.iMDBNummer;
@@ -157,16 +159,19 @@ function getFilms(){
 function filmClick(){
 	$(document).on("click",".filmFrame",function(){
 		
+		debugger;
+		
 		var imdb = $(this).attr("id");
-		alert(imdb);
 		
 		var content = $("#filmdetail");
-		content.empty();
+		
 		var accessToken = localStorage.getItem("accessToken");
-		alert(accessToken);
+		
 		if(accessToken!=null){
 			$("#mainContent").hide();
 			$("#moviesBtn").show();
+			$("#filmdetail").show();
+			
 			$.ajax({ 
 			    type: 'GET',
 			    url: "./api/film/" + imdb, 
@@ -193,9 +198,9 @@ function filmClick(){
 								
 								poster = data.Poster;
 								
+								content.empty();
 								
-								
-								$("#filmdetail").append(
+								content.append(
 									"<div class='filmDetail'>"+
 									"<img id='poster' alt='"+title.replace("'","-")+"'src='"+poster+"'>"+
 									"<h2 id='title'>Title: "+title+"</h2>"+
@@ -213,14 +218,14 @@ function filmClick(){
 								
 								$("#deleteButton").hide();
 								if(array.length > 0){
-									alert(array[0]);
+									
 									for(var i=0;i<array.length;i++){
-										alert("het lukt, delete");
+										
 										var object = array[i];
-										console.dir(object);
+			
 										var username = localStorage.getItem("username");
 										if(username == object.gebruiker.nickname){
-											alert(object.gebruiker);
+											
 											$("#deleteButton").show();
 											deleteRatingClick(imdb);
 											
@@ -251,7 +256,7 @@ function filmClick(){
 
 function deleteRatingClick(imdb){
 	$("#deleteButton").click(function(){
-		alert("delete clicked"+imdb);
+		
 		
 		var accessToken = localStorage.getItem("accessToken");
 		
@@ -262,9 +267,10 @@ function deleteRatingClick(imdb){
 				"Authorization":accessToken
 			},
 			success:function(data){
-				getFilms();
 				$("#mainContent").show();
-				$("filmdetail").hide();
+				$("#filmdetail").hide();
+				getFilms();
+				
 			},
 			error:function(jqXHR,settings,error){
 				alert("error in delete film "+error)
@@ -276,7 +282,7 @@ function deleteRatingClick(imdb){
 function userBtnClick(){
 	$("#usersBtn").click(function(){
 		$("#moviesBtn").show();
-		alert("ik ben in user btn click")
+		
 		
 			var accessToken = localStorage.getItem("accessToken");
 			if(accessToken!==null){
@@ -291,7 +297,7 @@ function userBtnClick(){
 function moviesBtnClick(){
 	$("#moviesBtn").click(function(){
 		$("#usersBtn").show();
-		alert("ik ben in movie btn click");
+		
 		window.location.href = "index.html";
 			
 		});
@@ -300,10 +306,10 @@ function moviesBtnClick(){
 function rateClick(imdb){
 	$("#rateBtn").click(function(){
 		var rating = $("#rateBox").val();
-		alert(rating);
+		
 		var accessToken = localStorage.getItem("accessToken");
-		alert(accessToken);
-		alert(imdb);
+		
+		
 		if(rating>=0.5&&rating<=5){
 			$.ajax({
 				type:"PUT",
@@ -316,8 +322,9 @@ function rateClick(imdb){
 					"rating":rating
 				},
 				success:function(data){
-					alert("rating gelukt");
+					
 					getFilms();
+					filmClick();
 					$("#mainContent").show();
 					$("#filmdetail").hide();
 				},
@@ -340,6 +347,7 @@ function logoutClick(){
 
 function registerClick(){
 	$("#register").click(function() {
+		localStorage.clear();
 		window.location.href = "register.html";
 	});
 }
@@ -350,7 +358,7 @@ $(document).ready(function(){
 	var content = $("#usersList");
 	var accessToken = localStorage.getItem("accessToken");
 	
-	alert(accessToken);
+	
 	
 	$.ajax({
 		type:"GET",
@@ -394,7 +402,7 @@ $(document).ready(function(){
 function registerSubmitClick() {
 	
 	$("#registerSubmitBtn").click(function() {
-		alert("sumbit is geclicked");
+		
 		
 	var firstnameReg = $("#firstnameReg").val();
 	var additionReg = $("#additionReg").val();
