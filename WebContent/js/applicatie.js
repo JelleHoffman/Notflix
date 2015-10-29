@@ -21,6 +21,8 @@ $(document).ready(function() {
 	moviesBtnClick();
 	filmClick();
 	logoutClick();
+	registerClick();
+	registerSubmitClick();
 	
 });
 
@@ -312,6 +314,12 @@ function logoutClick(){
 	});
 }
 
+function registerClick(){
+	$("#register").click(function() {
+		window.location.href = "register.html";
+	});
+}
+
 function userList(){
 			
 			$("#usersBtn").hide();
@@ -357,5 +365,33 @@ function userList(){
 		
 }
 
-
+function registerSubmitClick() {
+	
+	$("#registerSubmitBtn").click(function() {
+	var firstnameReg = $("#firstnameReg").val();
+	var lastnameReg = $("#lastnameReg").val();
+	var nicknameReg = $("#nicknameReg").val();
+	var passwordReg = $("#passwordReg").val();
+	
+	$.ajax({
+		type:"POST",
+		url: "./api/gebruikers/add-gebruiker",
+			Headers: {
+				"Voornaam":firstnameReg,
+				"Achternaam":lastnameReg,
+				"Nickname":nicknameReg,
+				"Wachtwoord":passwordReg,
+				
+			}
+	,
+		succes:function(data) {
+			window.location.href = "index.html";
+		},
+		error:function(jqXHR,settings,error){
+			alert("error in de register");
+			alert(error);
+		}
+	});
+	});
+}
 
